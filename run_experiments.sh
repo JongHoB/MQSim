@@ -47,7 +47,7 @@ CHIP_NO_PER_CHANNELS=(2 4 8)
 # Workload 파라미터
 # 4KB random: request_size=8 sectors, address=RANDOM_UNIFORM
 # 128KB sequential: request_size=256 sectors, address=STREAMING
-WORKLOAD_QUEUE_DEPTH=512  # SSD 큐를 포화시키기 위해 높은 값
+WORKLOAD_QUEUE_DEPTH=256  # SSD 큐를 포화시키기 위해 높은 값
 
 
 TRACE_FILE="traces/tpcc-small.trace"
@@ -316,35 +316,35 @@ for io_qd in "${IO_QUEUE_DEPTHS[@]}"; do
     # 4KB Random Read
     echo "4KB Random Read IO_Queue_Depth=${io_qd}"
     wl="${WORKLOADS_DIR}/wl_ioqd${io_qd}_4kb_randread.xml"
-    generate_synthetic_workload "${wl}" 100 8 "RANDOM_UNIFORM" "${WORKLOAD_QUEUE_DEPTH}" \
+    generate_synthetic_workload "${wl}" 100 8 "RANDOM_UNIFORM" "${io_qd}" \
         "${BASELINE_FLASH_CHANNEL_COUNT}" "${BASELINE_CHIP_NO_PER_CHANNEL}"
     run_single_experiment "ioqd${io_qd}_4kb_randread" "${ssd_cfg}" "${wl}" "exp1_io_queue_depth"
     
     # 4KB Random Write
     echo "4KB Random Write IO_Queue_Depth=${io_qd}"
     wl="${WORKLOADS_DIR}/wl_ioqd${io_qd}_4kb_randwrite.xml"
-    generate_synthetic_workload "${wl}" 0 8 "RANDOM_UNIFORM" "${WORKLOAD_QUEUE_DEPTH}" \
+    generate_synthetic_workload "${wl}" 0 8 "RANDOM_UNIFORM" "${io_qd}" \
         "${BASELINE_FLASH_CHANNEL_COUNT}" "${BASELINE_CHIP_NO_PER_CHANNEL}"
     run_single_experiment "ioqd${io_qd}_4kb_randwrite" "${ssd_cfg}" "${wl}" "exp1_io_queue_depth"
     
     # 4KB Mixed 70/30
     echo "4KB Mixed 70/30 IO_Queue_Depth=${io_qd}"
     wl="${WORKLOADS_DIR}/wl_ioqd${io_qd}_4kb_mixed.xml"
-    generate_synthetic_workload "${wl}" 70 8 "RANDOM_UNIFORM" "${WORKLOAD_QUEUE_DEPTH}" \
+    generate_synthetic_workload "${wl}" 70 8 "RANDOM_UNIFORM" "${io_qd}" \
         "${BASELINE_FLASH_CHANNEL_COUNT}" "${BASELINE_CHIP_NO_PER_CHANNEL}"
     run_single_experiment "ioqd${io_qd}_4kb_mixed" "${ssd_cfg}" "${wl}" "exp1_io_queue_depth"
     
     # 128KB Sequential Read
     echo "128KB Sequential Read IO_Queue_Depth=${io_qd}"
     wl="${WORKLOADS_DIR}/wl_ioqd${io_qd}_128kb_seqread.xml"
-    generate_synthetic_workload "${wl}" 100 256 "STREAMING" "${WORKLOAD_QUEUE_DEPTH}" \
+    generate_synthetic_workload "${wl}" 100 256 "STREAMING" "${io_qd}" \
         "${BASELINE_FLASH_CHANNEL_COUNT}" "${BASELINE_CHIP_NO_PER_CHANNEL}"
     run_single_experiment "ioqd${io_qd}_128kb_seqread" "${ssd_cfg}" "${wl}" "exp1_io_queue_depth"
     
     # 128KB Sequential Write
     echo "128KB Sequential Write IO_Queue_Depth=${io_qd}"
     wl="${WORKLOADS_DIR}/wl_ioqd${io_qd}_128kb_seqwrite.xml"
-    generate_synthetic_workload "${wl}" 0 256 "STREAMING" "${WORKLOAD_QUEUE_DEPTH}" \
+    generate_synthetic_workload "${wl}" 0 256 "STREAMING" "${io_qd}" \
         "${BASELINE_FLASH_CHANNEL_COUNT}" "${BASELINE_CHIP_NO_PER_CHANNEL}"
     run_single_experiment "ioqd${io_qd}_128kb_seqwrite" "${ssd_cfg}" "${wl}" "exp1_io_queue_depth"
 
@@ -382,35 +382,35 @@ for i in "${! DATA_CACHE_CAPACITIES[@]}"; do
     # 4KB Random Read
     echo "4KB Random Read with Cache=${cache_label}"
     wl="${WORKLOADS_DIR}/wl_cache${cache_label}_4kb_randread.xml"
-    generate_synthetic_workload "${wl}" 100 8 "RANDOM_UNIFORM" 32 \
+    generate_synthetic_workload "${wl}" 100 8 "RANDOM_UNIFORM" "${WORKLOAD_QUEUE_DEPTH}" \
         "${BASELINE_FLASH_CHANNEL_COUNT}" "${BASELINE_CHIP_NO_PER_CHANNEL}"
     run_single_experiment "cache${cache_label}_4kb_randread" "${ssd_cfg}" "${wl}" "exp2_data_cache"
     
     # 4KB Random Write
     echo "4KB Random Write with Cache=${cache_label}"
     wl="${WORKLOADS_DIR}/wl_cache${cache_label}_4kb_randwrite.xml"
-    generate_synthetic_workload "${wl}" 0 8 "RANDOM_UNIFORM" 32 \
+    generate_synthetic_workload "${wl}" 0 8 "RANDOM_UNIFORM" "${WORKLOAD_QUEUE_DEPTH}" \
         "${BASELINE_FLASH_CHANNEL_COUNT}" "${BASELINE_CHIP_NO_PER_CHANNEL}"
     run_single_experiment "cache${cache_label}_4kb_randwrite" "${ssd_cfg}" "${wl}" "exp2_data_cache"
     
     # 4KB Mixed 70/30
     echo "4KB Mixed 70/30 with Cache=${cache_label}"
     wl="${WORKLOADS_DIR}/wl_cache${cache_label}_4kb_mixed.xml"
-    generate_synthetic_workload "${wl}" 70 8 "RANDOM_UNIFORM" 32 \
+    generate_synthetic_workload "${wl}" 70 8 "RANDOM_UNIFORM" "${WORKLOAD_QUEUE_DEPTH}" \
         "${BASELINE_FLASH_CHANNEL_COUNT}" "${BASELINE_CHIP_NO_PER_CHANNEL}"
     run_single_experiment "cache${cache_label}_4kb_mixed" "${ssd_cfg}" "${wl}" "exp2_data_cache"
     
     # 128KB Sequential Read
     echo "128KB Sequential Read with Cache=${cache_label}"
     wl="${WORKLOADS_DIR}/wl_cache${cache_label}_128kb_seqread.xml"
-    generate_synthetic_workload "${wl}" 100 256 "STREAMING" 32 \
+    generate_synthetic_workload "${wl}" 100 256 "STREAMING" "${WORKLOAD_QUEUE_DEPTH}" \
         "${BASELINE_FLASH_CHANNEL_COUNT}" "${BASELINE_CHIP_NO_PER_CHANNEL}"
     run_single_experiment "cache${cache_label}_128kb_seqread" "${ssd_cfg}" "${wl}" "exp2_data_cache"
     
     # 128KB Sequential Write
     echo "128KB Sequential Write with Cache=${cache_label}"
     wl="${WORKLOADS_DIR}/wl_cache${cache_label}_128kb_seqwrite.xml"
-    generate_synthetic_workload "${wl}" 0 256 "STREAMING" 32 \
+    generate_synthetic_workload "${wl}" 0 256 "STREAMING" "${WORKLOAD_QUEUE_DEPTH}" \
         "${BASELINE_FLASH_CHANNEL_COUNT}" "${BASELINE_CHIP_NO_PER_CHANNEL}"
     run_single_experiment "cache${cache_label}_128kb_seqwrite" "${ssd_cfg}" "${wl}" "exp2_data_cache"
 
@@ -447,31 +447,31 @@ for ch_cnt in "${FLASH_CHANNEL_COUNTS[@]}"; do
         # 4KB Random Read
 	echo "4KB Random Read with Channels=${ch_cnt}, Chips/Ch=${chip_cnt} (Total=${total_ways} ways)"
         wl="${WORKLOADS_DIR}/wl_ch${ch_cnt}_chip${chip_cnt}_4kb_randread.xml"
-        generate_synthetic_workload "${wl}" 100 8 "RANDOM_UNIFORM" 32 "${ch_cnt}" "${chip_cnt}"
+        generate_synthetic_workload "${wl}" 100 8 "RANDOM_UNIFORM" "${WORKLOAD_QUEUE_DEPTH}" "${ch_cnt}" "${chip_cnt}"
         run_single_experiment "ch${ch_cnt}_chip${chip_cnt}_4kb_randread" "${ssd_cfg}" "${wl}" "exp3_flash_parallelism"
         
         # 4KB Random Write
 	echo "4KB Random Write with Channels=${ch_cnt}, Chips/Ch=${chip_cnt} (Total=${total_ways} ways)"
         wl="${WORKLOADS_DIR}/wl_ch${ch_cnt}_chip${chip_cnt}_4kb_randwrite.xml"
-        generate_synthetic_workload "${wl}" 0 8 "RANDOM_UNIFORM" 32 "${ch_cnt}" "${chip_cnt}"
+        generate_synthetic_workload "${wl}" 0 8 "RANDOM_UNIFORM" "${WORKLOAD_QUEUE_DEPTH}" "${ch_cnt}" "${chip_cnt}"
         run_single_experiment "ch${ch_cnt}_chip${chip_cnt}_4kb_randwrite" "${ssd_cfg}" "${wl}" "exp3_flash_parallelism"
         
         # 4KB Mixed 70/30
 	echo "4KB Mixed 70/30 with Channels=${ch_cnt}, Chips/Ch=${chip_cnt} (Total=${total_ways} ways)"
         wl="${WORKLOADS_DIR}/wl_ch${ch_cnt}_chip${chip_cnt}_4kb_mixed.xml"
-        generate_synthetic_workload "${wl}" 70 8 "RANDOM_UNIFORM" 32 "${ch_cnt}" "${chip_cnt}"
+        generate_synthetic_workload "${wl}" 70 8 "RANDOM_UNIFORM" "${WORKLOAD_QUEUE_DEPTH}" "${ch_cnt}" "${chip_cnt}"
         run_single_experiment "ch${ch_cnt}_chip${chip_cnt}_4kb_mixed" "${ssd_cfg}" "${wl}" "exp3_flash_parallelism"
         
         # 128KB Sequential Read
 	echo "128KB Sequential Read with Channels=${ch_cnt}, Chips/Ch=${chip_cnt} (Total=${total_ways} ways)"
         wl="${WORKLOADS_DIR}/wl_ch${ch_cnt}_chip${chip_cnt}_128kb_seqread.xml"
-        generate_synthetic_workload "${wl}" 100 256 "STREAMING" 32 "${ch_cnt}" "${chip_cnt}"
+        generate_synthetic_workload "${wl}" 100 256 "STREAMING" "${WORKLOAD_QUEUE_DEPTH}" "${ch_cnt}" "${chip_cnt}"
         run_single_experiment "ch${ch_cnt}_chip${chip_cnt}_128kb_seqread" "${ssd_cfg}" "${wl}" "exp3_flash_parallelism"
         
         # 128KB Sequential Write
 	echo "128KB Sequential Write with Channels=${ch_cnt}, Chips/Ch=${chip_cnt} (Total=${total_ways} ways)"
         wl="${WORKLOADS_DIR}/wl_ch${ch_cnt}_chip${chip_cnt}_128kb_seqwrite.xml"
-        generate_synthetic_workload "${wl}" 0 256 "STREAMING" 32 "${ch_cnt}" "${chip_cnt}"
+        generate_synthetic_workload "${wl}" 0 256 "STREAMING" "${WORKLOAD_QUEUE_DEPTH}" "${ch_cnt}" "${chip_cnt}"
         run_single_experiment "ch${ch_cnt}_chip${chip_cnt}_128kb_seqwrite" "${ssd_cfg}" "${wl}" "exp3_flash_parallelism"
 
 	if [ -f "${TRACE_FILE}" ]; then

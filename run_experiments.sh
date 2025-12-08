@@ -24,7 +24,7 @@ mkdir -p "${WORKLOADS_DIR}"
 # ============================================================================
 # Baseline 값 (JongHoB/MQSim/ssdconfig.xml 그대로)
 # ============================================================================
-BASELINE_IO_QUEUE_DEPTH=256
+BASELINE_IO_QUEUE_DEPTH=512
 BASELINE_DATA_CACHE_CAPACITY=268435456    # 256 MB
 BASELINE_FLASH_CHANNEL_COUNT=8
 BASELINE_CHIP_NO_PER_CHANNEL=4
@@ -34,7 +34,7 @@ BASELINE_CHIP_NO_PER_CHANNEL=4
 # ============================================================================
 
 # 실험 1: NVMe Queueing (Host-side) - IO_Queue_Depth 변화
-IO_QUEUE_DEPTHS=(1 8 32 128 256)
+IO_QUEUE_DEPTHS=(8 32 128 256 512)
 
 # 실험 2: DRAM Buffer - Data_Cache_Capacity 변화
 DATA_CACHE_CAPACITIES=(0 134217728 268435456 1073741824)
@@ -47,7 +47,7 @@ CHIP_NO_PER_CHANNELS=(2 4 8)
 # Workload 파라미터
 # 4KB random: request_size=8 sectors, address=RANDOM_UNIFORM
 # 128KB sequential: request_size=256 sectors, address=STREAMING
-WORKLOAD_QUEUE_DEPTH=256  # SSD 큐를 포화시키기 위해 높은 값
+WORKLOAD_QUEUE_DEPTH=512  # SSD 큐를 포화시키기 위해 높은 값
 
 
 TRACE_FILE="traces/tpcc-small.trace"

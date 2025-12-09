@@ -76,7 +76,7 @@ generate_ssd_config() {
 	</Host_Parameter_Set>
 	<Device_Parameter_Set>
 		<Seed>321</Seed>
-		<Enabled_Preconditioning>true</Enabled_Preconditioning>
+		<Enabled_Preconditioning>false</Enabled_Preconditioning>
 		<Memory_Type>FLASH</Memory_Type>
 		<HostInterface_Type>NVME</HostInterface_Type>
 XMLEOF
@@ -104,7 +104,7 @@ XMLEOF
 		<CMT_Capacity>2097152</CMT_Capacity>
 		<CMT_Sharing_Mode>SHARED</CMT_Sharing_Mode>
 		<Plane_Allocation_Scheme>CWDP</Plane_Allocation_Scheme>
-		<Transaction_Scheduling_Policy>OUT_OF_ORDER</Transaction_Scheduling_Policy>
+		<Transaction_Scheduling_Policy>PRIORITY_OUT_OF_ORDER</Transaction_Scheduling_Policy>
 		<Overprovisioning_Ratio>0.07</Overprovisioning_Ratio>
 		<GC_Exec_Threshold>0.05000</GC_Exec_Threshold>
 		<GC_Block_Selection_Policy>RGA</GC_Block_Selection_Policy>
@@ -203,7 +203,7 @@ generate_synthetic_workload() {
 			<Variance_Request_Size>0</Variance_Request_Size>
 			<Seed>12345</Seed>
 			<Average_No_of_Reqs_in_Queue>${queue_depth}</Average_No_of_Reqs_in_Queue>
-			<Stop_Time>10000000000</Stop_Time>
+			<Stop_Time>100000000000</Stop_Time>
 			<Total_Requests_To_Generate>0</Total_Requests_To_Generate>
 		</IO_Flow_Parameter_Set_Synthetic>
 	</IO_Scenario>
@@ -320,13 +320,13 @@ for io_qd in "${IO_QUEUE_DEPTHS[@]}"; do
         "${BASELINE_FLASH_CHANNEL_COUNT}" "${BASELINE_CHIP_NO_PER_CHANNEL}"
     run_single_experiment "ioqd${io_qd}_4kb_randread" "${ssd_cfg}" "${wl}" "exp1_io_queue_depth"
     
-#    # 4KB Random Write
-#    echo "4KB Random Write IO_Queue_Depth=${io_qd}"
-#    wl="${WORKLOADS_DIR}/wl_ioqd${io_qd}_4kb_randwrite.xml"
-#    generate_synthetic_workload "${wl}" 0 8 "RANDOM_UNIFORM" "${io_qd}" \
-#        "${BASELINE_FLASH_CHANNEL_COUNT}" "${BASELINE_CHIP_NO_PER_CHANNEL}"
-#    run_single_experiment "ioqd${io_qd}_4kb_randwrite" "${ssd_cfg}" "${wl}" "exp1_io_queue_depth"
-#    
+    # 4KB Random Write
+    echo "4KB Random Write IO_Queue_Depth=${io_qd}"
+    wl="${WORKLOADS_DIR}/wl_ioqd${io_qd}_4kb_randwrite.xml"
+    generate_synthetic_workload "${wl}" 0 8 "RANDOM_UNIFORM" "${io_qd}" \
+        "${BASELINE_FLASH_CHANNEL_COUNT}" "${BASELINE_CHIP_NO_PER_CHANNEL}"
+    run_single_experiment "ioqd${io_qd}_4kb_randwrite" "${ssd_cfg}" "${wl}" "exp1_io_queue_depth"
+    
     # 4KB Mixed 70/30
     echo "4KB Mixed 70/30 IO_Queue_Depth=${io_qd}"
     wl="${WORKLOADS_DIR}/wl_ioqd${io_qd}_4kb_mixed.xml"
@@ -366,7 +366,7 @@ echo "============================================"
 echo "Experiment 2: Data_Cache_Capacity (DRAM)"
 echo "============================================"
 
-for i in "${! DATA_CACHE_CAPACITIES[@]}"; do
+for i in "${!DATA_CACHE_CAPACITIES[@]}"; do
     cache_cap="${DATA_CACHE_CAPACITIES[$i]}"
     cache_label="${DATA_CACHE_LABELS[$i]}"
     
@@ -386,13 +386,13 @@ for i in "${! DATA_CACHE_CAPACITIES[@]}"; do
         "${BASELINE_FLASH_CHANNEL_COUNT}" "${BASELINE_CHIP_NO_PER_CHANNEL}"
     run_single_experiment "cache${cache_label}_4kb_randread" "${ssd_cfg}" "${wl}" "exp2_data_cache"
     
-#    # 4KB Random Write
-#    echo "4KB Random Write with Cache=${cache_label}"
-#    wl="${WORKLOADS_DIR}/wl_cache${cache_label}_4kb_randwrite.xml"
-#    generate_synthetic_workload "${wl}" 0 8 "RANDOM_UNIFORM" "${WORKLOAD_QUEUE_DEPTH}" \
-#        "${BASELINE_FLASH_CHANNEL_COUNT}" "${BASELINE_CHIP_NO_PER_CHANNEL}"
-#    run_single_experiment "cache${cache_label}_4kb_randwrite" "${ssd_cfg}" "${wl}" "exp2_data_cache"
-#    
+    # 4KB Random Write
+    echo "4KB Random Write with Cache=${cache_label}"
+    wl="${WORKLOADS_DIR}/wl_cache${cache_label}_4kb_randwrite.xml"
+    generate_synthetic_workload "${wl}" 0 8 "RANDOM_UNIFORM" "${WORKLOAD_QUEUE_DEPTH}" \
+        "${BASELINE_FLASH_CHANNEL_COUNT}" "${BASELINE_CHIP_NO_PER_CHANNEL}"
+    run_single_experiment "cache${cache_label}_4kb_randwrite" "${ssd_cfg}" "${wl}" "exp2_data_cache"
+    
     # 4KB Mixed 70/30
     echo "4KB Mixed 70/30 with Cache=${cache_label}"
     wl="${WORKLOADS_DIR}/wl_cache${cache_label}_4kb_mixed.xml"
@@ -449,13 +449,13 @@ for ch_cnt in "${FLASH_CHANNEL_COUNTS[@]}"; do
         wl="${WORKLOADS_DIR}/wl_ch${ch_cnt}_chip${chip_cnt}_4kb_randread.xml"
         generate_synthetic_workload "${wl}" 100 8 "RANDOM_UNIFORM" "${WORKLOAD_QUEUE_DEPTH}" "${ch_cnt}" "${chip_cnt}"
         run_single_experiment "ch${ch_cnt}_chip${chip_cnt}_4kb_randread" "${ssd_cfg}" "${wl}" "exp3_flash_parallelism"
+       
+        # 4KB Random Write
+	echo "4KB Random Write with Channels=${ch_cnt}, Chips/Ch=${chip_cnt} (Total=${total_ways} ways)"
+        wl="${WORKLOADS_DIR}/wl_ch${ch_cnt}_chip${chip_cnt}_4kb_randwrite.xml"
+        generate_synthetic_workload "${wl}" 0 8 "RANDOM_UNIFORM" "${WORKLOAD_QUEUE_DEPTH}" "${ch_cnt}" "${chip_cnt}"
+        run_single_experiment "ch${ch_cnt}_chip${chip_cnt}_4kb_randwrite" "${ssd_cfg}" "${wl}" "exp3_flash_parallelism"
         
-#        # 4KB Random Write
-#	echo "4KB Random Write with Channels=${ch_cnt}, Chips/Ch=${chip_cnt} (Total=${total_ways} ways)"
-#        wl="${WORKLOADS_DIR}/wl_ch${ch_cnt}_chip${chip_cnt}_4kb_randwrite.xml"
-#        generate_synthetic_workload "${wl}" 0 8 "RANDOM_UNIFORM" "${WORKLOAD_QUEUE_DEPTH}" "${ch_cnt}" "${chip_cnt}"
-#        run_single_experiment "ch${ch_cnt}_chip${chip_cnt}_4kb_randwrite" "${ssd_cfg}" "${wl}" "exp3_flash_parallelism"
-#        
         # 4KB Mixed 70/30
 	echo "4KB Mixed 70/30 with Channels=${ch_cnt}, Chips/Ch=${chip_cnt} (Total=${total_ways} ways)"
         wl="${WORKLOADS_DIR}/wl_ch${ch_cnt}_chip${chip_cnt}_4kb_mixed.xml"

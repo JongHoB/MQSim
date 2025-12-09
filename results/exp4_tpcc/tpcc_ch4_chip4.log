@@ -1,0 +1,56 @@
+MQSim started at Mon Dec  8 10:08:41 2025
+
+******************************
+Executing scenario 1 out of 1 .......
+Investigating input trace file: traces/tpcc-small.trace
+Trace file: traces/tpcc-small.trace seems healthy
+[>                   ]  0% progress in Host.IO_Flow.Trace.traces/tpcc-small.trace
+
+[=>                  ]  5% progress in Host.IO_Flow.Trace.traces/tpcc-small.trace
+
+[==>                 ]  10% progress in Host.IO_Flow.Trace.traces/tpcc-small.trace
+
+[===>                ]  15% progress in Host.IO_Flow.Trace.traces/tpcc-small.trace
+
+[====>               ]  20% progress in Host.IO_Flow.Trace.traces/tpcc-small.trace
+
+[=====>              ]  25% progress in Host.IO_Flow.Trace.traces/tpcc-small.trace
+
+[======>             ]  30% progress in Host.IO_Flow.Trace.traces/tpcc-small.trace
+
+[=======>            ]  35% progress in Host.IO_Flow.Trace.traces/tpcc-small.trace
+
+[========>           ]  40% progress in Host.IO_Flow.Trace.traces/tpcc-small.trace
+
+[=========>          ]  45% progress in Host.IO_Flow.Trace.traces/tpcc-small.trace
+
+[==========>         ]  50% progress in Host.IO_Flow.Trace.traces/tpcc-small.trace
+
+[===========>        ]  55% progress in Host.IO_Flow.Trace.traces/tpcc-small.trace
+
+[============>       ]  60% progress in Host.IO_Flow.Trace.traces/tpcc-small.trace
+
+[=============>      ]  65% progress in Host.IO_Flow.Trace.traces/tpcc-small.trace
+
+[==============>     ]  70% progress in Host.IO_Flow.Trace.traces/tpcc-small.trace
+
+[===============>    ]  75% progress in Host.IO_Flow.Trace.traces/tpcc-small.trace
+
+[================>   ]  80% progress in Host.IO_Flow.Trace.traces/tpcc-small.trace
+
+[=================>  ]  85% progress in Host.IO_Flow.Trace.traces/tpcc-small.trace
+
+[==================> ]  90% progress in Host.IO_Flow.Trace.traces/tpcc-small.trace
+
+[===================>]  95% progress in Host.IO_Flow.Trace.traces/tpcc-small.trace
+
+[====================]  100% progress in Host.IO_Flow.Trace.traces/tpcc-small.trace
+
+MQSim finished at Mon Dec  8 10:08:42 2025
+
+Total simulation time: 0:0:1
+
+Writing results to output file .......
+Flow Host.IO_Flow.Trace.traces/tpcc-small.trace - total requests generated: 6999 total requests serviced:6999
+                   - device response time: 28829 (us) end-to-end request delay:48048 (us)
+Simulation complete; Press any key to exit.

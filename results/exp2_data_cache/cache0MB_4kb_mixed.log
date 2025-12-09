@@ -1,0 +1,5 @@
+MQSim started at Mon Dec  8 09:16:17 2025
+
+******************************
+Executing scenario 1 out of 1 .......
+MQSim: src/ssd/Data_Cache_Flash.cpp:84: SSD_Components::Data_Cache_Slot_Type SSD_Components::Data_Cache_Flash::Evict_one_slot_lru(): Assertion `slots.size() > 0' failed.

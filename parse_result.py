@@ -19,6 +19,8 @@ Usage
     python parse_mqsim_results.py \
         --input_dir /path/to/xml/results \
         --output_csv mqsim_summary.csv
+        
+   python3 parse_result.py --input_dir ./results --output_csv mqsim_summary.csv
 
 You can edit the POWER_MODEL dictionary in this file to change the
 weights used for the energy index.

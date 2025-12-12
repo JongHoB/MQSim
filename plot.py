@@ -76,6 +76,25 @@ def plot_metric_vs_param(df: pd.DataFrame,
     else:
         x_label = param_col
 
+    # title에 쓸 이름
+    labels = {
+       "host_BW_MiB_per_s" : "Host Bandwidth (MiB/s)",
+        "host_IOPS" : "Host IOPS",
+        "host_E2E_Latency_ms_assuming_us" : "Host E2E Latency (ms)",
+        "tsu_User_Transactions_Enqueued" : "TSU User Transactions Enqueued",
+        "ftl_Total_Flash_Read_CMD" : "FTL Total Flash Read CMD",
+        "ftl_Total_Flash_Program_CMD" : "FTL Total Flash Program CMD",
+        "ftl_Total_Flash_Erase_CMD" : "FTL Total Flash Erase CMD",
+        "ftl_CMT_Hit_Rate" : "FTL CMT Hit Rate",
+        "ftl_Total_GC_Executions" : "FTL Total GC Executions",
+        "chip_Avg_Fraction_Idle" : "Chip Avg Fraction Idle",
+        "chip_Avg_Fraction_DataXfer" : "Chip Avg Fraction DataXfer",
+        "chip_Avg_Fraction_Exec" : "Chip Avg Fraction Exec",
+        "energy_Energy_per_IO_Index" : "Power(Energy/IO)", 
+    }
+    y_label = labels[metric_col] if metric_col in labels else metric_col
+
+
     # 정렬을 위해 float로 변환
     use["x"] = use[param_col].astype(float)
     use = use.sort_values(["workload", "x"])
@@ -86,10 +105,10 @@ def plot_metric_vs_param(df: pd.DataFrame,
         plt.plot(sub["x"], sub[metric_col], marker="o", label=workload)
 
     plt.xlabel(x_label)
-    plt.ylabel(metric_col)
+    plt.ylabel(y_label)
 
     label_prefix = title_prefix if title_prefix is not None else x_label
-    plt.title(f"{metric_col} vs {label_prefix}")
+    plt.title(f"{y_label} vs {label_prefix}")
 
     plt.legend()
     plt.grid(True)
